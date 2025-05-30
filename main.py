@@ -18,53 +18,33 @@ def put_file_to_s3(file_name, df: pd.DataFrame()):
     s3.put_object(Bucket=bucket_name, Key=file_key, Body=csv_buffer.getvalue())
 
 
-def get_string() -> list:
+def import_tweets() -> list:
     df = pd.read_csv('tweets.csv')
 
     return df['text'].str.split()
 
 
 def levenshtein_distance(s1, s2):
-    """
-    Calculate the Levenshtein distance between two strings.
 
-    Parameters:
-    s1 (str): First string
-    s2 (str): Second string
-
-    Returns:
-    int: The Levenshtein distance between s1 and s2
-    """
-
-    # Create a distance matrix with dimensions (len(s1)+1) x (len(s2)+1)
     rows = len(s1) + 1
     cols = len(s2) + 1
     dist = [[0 for _ in range(cols)] for _ in range(rows)]
 
-    # Initialize the first row and column with incremental values
-    # This represents the cost of inserting all characters of the other string
     for i in range(1, rows):
         dist[i][0] = i
     for j in range(1, cols):
         dist[0][j] = j
 
-    # Fill in the distance matrix
     for i in range(1, rows):
         for j in range(1, cols):
-            # If characters are the same, no cost for substitution
             cost = 0 if s1[i-1] == s2[j-1] else 1
 
-            # Calculate minimum cost from three possible operations:
-            # 1. Deletion (left cell)
-            # 2. Insertion (top cell)
-            # 3. Substitution (diagonal cell)
             dist[i][j] = min(
                 dist[i-1][j] + 1,      # Deletion
                 dist[i][j-1] + 1,      # Insertion
                 dist[i-1][j-1] + cost   # Substitution
             )
 
-    # The bottom-right cell contains the Levenshtein distance
     return dist[-1][-1]
 
 
@@ -87,7 +67,7 @@ def salvar(dados: pd.DataFrame):
 
 
 if __name__ == "__main__":
-    tweets = get_string()
+    tweets = import_tweets()
 
     filtro = []
     for text in tweets:
