@@ -65,6 +65,10 @@ def filtrar(word: str) -> list:
 def salvar(dados: pd.DataFrame):
     dados.to_csv("filtro.csv", index=False)
 
+def analise_lexica(words: list) -> list:
+    # analise lexica para identificar palavras por categorias
+    return words
+
 
 if __name__ == "__main__":
     tweets = import_tweets()
@@ -79,4 +83,4 @@ if __name__ == "__main__":
 
     df = pd.DataFrame(filtro, columns=["Bad_Word"])
     salvar(df)
-    put_file_to_s3("filtro", df)
+    # put_file_to_s3("filtro", df)
