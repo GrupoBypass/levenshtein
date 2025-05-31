@@ -89,10 +89,14 @@ def analisar_problemas(tweet):
     problemas = []
 
     for tipo, valor in tokens:
+        if tipo in [TokenType.PONTUACAO]:
+            print("Erro: Palavra não identificada")
+
         if tipo in [TokenType.ATRASO, TokenType.LOTACAO,
                     TokenType.FALHA, TokenType.INTERRUPCAO,
                     TokenType.RECLAMACAO]:
             problemas.append((tipo, valor))
+        
 
     return problemas
 
@@ -194,4 +198,4 @@ if __name__ == "__main__":
     df = pd.DataFrame(filtro, columns=["Bad_Word"])
     salvar(df, "wordcloud.csv")
 
-    put_file_to_s3("wordcloud-" + str(datetime.now().date()), df)
+    # put_file_to_s3("wordcloud-" + str(datetime.now().date()), df)
